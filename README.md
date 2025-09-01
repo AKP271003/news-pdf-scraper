@@ -20,19 +20,14 @@ A Python web application that scrapes Indian Express articles, summarizes them u
 
 #### Installing wkhtmltopdf
 
+**Windows:**
+Download from: https://wkhtmltopdf.org/downloads.html
+
 **Ubuntu:**
 ```bash
 sudo apt-get update
 sudo apt-get install wkhtmltopdf
 ```
-
-**macOS:**
-```bash
-brew install wkhtmltopdf
-```
-
-**Windows:**
-Download from: https://wkhtmltopdf.org/downloads.html
 
 ### Setup
 
@@ -123,23 +118,3 @@ Create a `.env` file with these settings:
 | `/subscribers` | GET | Subscribers page |
 | `/unsubscribe` | POST | Remove subscription |
 | `/send_now/{id}` | POST | Manual delivery |
-
-
-## 📊 Project Structure
-
-```
-news-pdf-scraper/
-├── app/
-│   ├── main.py              # FastAPI application
-│   ├── config.py            # Configuration
-│   ├── models.py            # Database models
-│   ├── utils.py             # Utilities
-│   ├── api/routes.py        # API endpoints
-│   ├── services/            # Core services
-│   ├── templates/           # HTML templates
-│   └── static/             # CSS files
-├── requirements.txt         # Dependencies
-├── .env.example            # Environment template
-├── db_init.py              # Database setup
-└── README.md               # This file
-```
