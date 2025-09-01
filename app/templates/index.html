@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News PDF Scraper - Indian Express</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/styles.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-newspaper me-2"></i>
+                    News PDF Scraper
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/subscribers">
+                        <i class="fas fa-users me-1"></i>
+                        Subscribers
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div id="statusMessages"></div>
+
+            <!-- Main Dashboard -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h4 class="mb-0">
+                                <i class="fas fa-file-pdf me-2"></i>
+                                Generate News PDF
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="generateForm">
+                                <!-- Categories Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-tags me-1"></i>
+                                        Select Categories:
+                                    </label>
+                                    <div class="row">
+                                        {% for category in categories %}
+                                        <div class="col-md-6 col-lg-4 mb-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       value="{{ category }}" id="cat_{{ category }}" 
+                                                       name="categories">
+                                                <label class="form-check-label" for="cat_{{ category }}">
+                                                    {{ category.replace('_', ' ').title() }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <small class="text-muted">Select one or more categories. If none selected, all categories will be included.</small>
+                                </div>
+
+                                <!-- Number of Articles -->
+                                <div class="mb-4">
+                                    <label for="nArticles" class="form-label fw-bold">
+                                        <i class="fas fa-list-ol me-1"></i>
+                                        Articles per Category:
+                                    </label>
+                                    <select class="form-select" id="nArticles" name="n_articles">
+                                        <option value="5">5 articles</option>
+                                        <option value="10" selected>10 articles</option>
+                                        <option value="15">15 articles</option>
+                                        <option value="20">20 articles</option>
+                                    </select>
+                                </div>
+
+                                <!-- Email Input -->
+                                <div class="mb-4">
+                                    <label for="email" class="form-label fw-bold">
+                                        <i class="fas fa-envelope me-1"></i>
+                                        Email Address (optional):
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           placeholder="Enter your email to receive PDF via email">
+                                    <small class="text-muted">Leave blank to only generate downloadable PDF</small>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                    <button type="submit" class="btn btn-success btn-lg me-md-2" data-action="email">
+                                        <i class="fas fa-paper-plane me-2"></i>
+                                        Send Email Now
+                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-lg" data-action="download">
+                                        <i class="fas fa-download me-2"></i>
+                                        Download PDF
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Section -->
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bell me-2"></i>
+                                Subscribe for Daily Delivery
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="subscribeForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="subEmail" class="form-label">Email Address:</label>
+                                        <input type="email" class="form-control" id="subEmail" 
+                                               name="email" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="deliveryTime" class="form-label">Delivery Time:</label>
+                                        <input type="time" class="form-control" id="deliveryTime" 
+                                               name="time_of_day" value="08:00" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Categories for Subscription:</label>
+                                    <div class="row">
+                                        {% for category in categories %}
+                                        <div class="col-md-6 col-lg-4 mb-1">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       value="{{ category }}" id="sub_{{ category }}" 
+                                                       name="sub_categories">
+                                                <label class="form-check-label" for="sub_{{ category }}">
+                                                    {{ category.replace('_', ' ').title() }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-calendar-plus me-2"></i>
+                                    Subscribe
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 id="loadingText">Processing your request...</h5>
+                    <p class="text-muted mb-0">This may take a few minutes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('generateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const action = e.submitter.dataset.action;
+
+            const categories = Array.from(document.querySelectorAll('input[name="categories"]:checked'))
+                .map(cb => cb.value);
+
+            if (categories.length === 0) {
+                {{ categories|safe }}.forEach(cat => categories.push(cat));
+            }
+
+            const email = formData.get('email');
+            const n_articles = parseInt(formData.get('n_articles'));
+
+            const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+            loadingModal.show();
+
+            if (action === 'email' && !email) {
+                loadingModal.hide();
+                showAlert('Please enter an email address to send PDF via email', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        categories: categories,
+                        n: n_articles,
+                        email: action === 'email' ? email : null
+                    })
+                });
+
+                const result = await response.json();
+                loadingModal.hide();
+
+                if (response.ok) {
+                    if (action === 'download') {
+                        // Trigger download
+                        window.location.href = result.pdf_url;
+                        showAlert('PDF generated successfully! Download should start automatically.', 'success');
+                    } else {
+                        showAlert(result.message, 'success');
+                    }
+                } else {
+                    showAlert(result.detail || 'An error occurred', 'danger');
+                }
+            } catch (error) {
+                loadingModal.hide();
+                showAlert('Network error occurred. Please try again.', 'danger');
+            }
+        });
+
+        // Subscription form handling
+        document.getElementById('subscribeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const categories = Array.from(document.querySelectorAll('input[name="sub_categories"]:checked'))
+                .map(cb => cb.value);
+
+            if (categories.length === 0) {
+                showAlert('Please select at least one category for subscription', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch('/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        categories: categories,
+                        time_of_day: formData.get('time_of_day'),
+                        timezone: 'Asia/Kolkata'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert(result.message, 'success');
+                    e.target.reset();
+                } else {
+                    showAlert(result.detail || 'An error occurred', 'danger');
+                }
+            } catch (error) {
+                showAlert('Network error occurred. Please try again.', 'danger');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = ` ${message} <button type="button" class="btn-close" data-bs-dismiss="alert"></button> `;
+
+            const container = document.getElementById('statusMessages');
+            container.appendChild(alertDiv);
+
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
