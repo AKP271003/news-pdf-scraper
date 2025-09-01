@@ -50,7 +50,6 @@ pip install -r requirements.txt
 
 4. **Configure environment:**
 ```bash
-cp .env.example .env
 # Edit .env with your configuration
 ```
 
@@ -118,4 +117,5 @@ Create a `.env` file with these settings:
 | `/subscribers` | GET | Subscribers page |
 | `/unsubscribe` | POST | Remove subscription |
 | `/send_now/{id}` | POST | Manual delivery |
+
 
