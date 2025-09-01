@@ -33,7 +33,7 @@ sudo apt-get install wkhtmltopdf
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/AKP271003/news-pdf-scraper
 cd news-pdf-scraper
 ```
 
@@ -118,3 +118,4 @@ Create a `.env` file with these settings:
 | `/subscribers` | GET | Subscribers page |
 | `/unsubscribe` | POST | Remove subscription |
 | `/send_now/{id}` | POST | Manual delivery |
+
